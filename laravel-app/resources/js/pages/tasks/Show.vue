@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import { computed } from 'vue';
 import { ArrowLeft, PencilLine, Trash2 } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 export interface Task {
     id: number;
@@ -81,15 +81,17 @@ const duration = computed(() => {
     <AppLayout :breadcrumbs="breadcrumbItems">
         <Head title="Task Details" />
 
-        <div class="p-4 sm:p-6 lg:p-8 text-slate-900 dark:text-slate-50">
+        <div class="p-4 text-slate-900 sm:p-6 lg:p-8 dark:text-slate-50">
             <!-- Header -->
             <div
                 class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
             >
                 <div>
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                    <div
+                        class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400"
+                    >
                         <span
-                            class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide dark:bg-slate-800"
+                            class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium tracking-wide uppercase dark:bg-slate-800"
                         >
                             Task #{{ props.task.id }}
                         </span>
@@ -99,31 +101,31 @@ const duration = computed(() => {
                         </span>
                     </div>
 
-                    <h1 class="mt-2 text-2xl font-semibold leading-tight">
+                    <h1 class="mt-2 text-2xl leading-tight font-semibold">
                         {{ props.task.name || 'Task Details' }}
                     </h1>
                     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                        Informações da tarefa e histórico de datas.
+                        Task information and data history.
                     </p>
                 </div>
 
-                <div class="flex flex-wrap gap-2 justify-start sm:justify-end">
+                <div class="flex flex-wrap justify-start gap-2 sm:justify-end">
                     <!-- Voltar -->
                     <Link
                         href="/tasks"
-                        class="inline-flex items-center justify-center gap-2 rounded-md border border-slate-500/70 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-100 bg-slate-800 hover:bg-slate-700 transition dark:border-slate-600"
+                        class="inline-flex items-center justify-center gap-2 rounded-md border border-slate-500/70 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-100 transition hover:bg-slate-700 sm:text-sm dark:border-slate-600"
                     >
                         <ArrowLeft class="h-4 w-4" />
-                        <span>Voltar</span>
+                        <span>Back</span>
                     </Link>
 
                     <!-- Editar -->
                     <Link
                         :href="`/tasks/${props.task.id}/edit`"
-                        class="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-600 px-3 py-1.5 text-xs sm:text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700"
+                        class="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-emerald-700 sm:text-sm"
                     >
                         <PencilLine class="h-4 w-4" />
-                        <span>Editar</span>
+                        <span>Edit</span>
                     </Link>
 
                     <!-- Excluir -->
@@ -131,10 +133,10 @@ const duration = computed(() => {
                         as="button"
                         method="delete"
                         :href="`/tasks/${props.task.id}`"
-                        class="inline-flex items-center justify-center gap-2 rounded-md bg-rose-600 px-3 py-1.5 text-xs sm:text-sm font-medium text-white shadow-sm transition hover:bg-rose-700"
+                        class="inline-flex items-center justify-center gap-2 rounded-md bg-rose-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-rose-700 sm:text-sm"
                     >
                         <Trash2 class="h-4 w-4" />
-                        <span>Excluir</span>
+                        <span>Delete</span>
                     </Link>
                 </div>
             </div>
@@ -144,23 +146,29 @@ const duration = computed(() => {
                 class="rounded-xl border border-slate-200 bg-white/90 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900"
             >
                 <h2
-                    class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
+                    class="text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
-                    Detalhes da tarefa
+                    Details Task
                 </h2>
 
-                <div class="mt-4 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
+                <div
+                    class="mt-4 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700"
+                >
                     <table class="min-w-full text-sm">
-                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                        <tbody
+                            class="divide-y divide-slate-200 dark:divide-slate-800"
+                        >
                             <!-- Nome -->
                             <tr>
                                 <th
                                     scope="row"
-                                    class="w-40 sm:w-56 bg-slate-50 px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                                    class="w-40 bg-slate-50 px-4 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase sm:w-56 dark:bg-slate-800 dark:text-slate-400"
                                 >
-                                    Nome
+                                    Name
                                 </th>
-                                <td class="px-4 py-2 text-slate-900 dark:text-slate-50">
+                                <td
+                                    class="px-4 py-2 text-slate-900 dark:text-slate-50"
+                                >
                                     {{ props.task.name }}
                                 </td>
                             </tr>
@@ -169,11 +177,13 @@ const duration = computed(() => {
                             <tr>
                                 <th
                                     scope="row"
-                                    class="w-40 sm:w-56 bg-slate-50 px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                                    class="w-40 bg-slate-50 px-4 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase sm:w-56 dark:bg-slate-800 dark:text-slate-400"
                                 >
                                     ID
                                 </th>
-                                <td class="px-4 py-2 text-slate-900 dark:text-slate-50">
+                                <td
+                                    class="px-4 py-2 text-slate-900 dark:text-slate-50"
+                                >
                                     #{{ props.task.id }}
                                 </td>
                             </tr>
@@ -182,11 +192,13 @@ const duration = computed(() => {
                             <tr>
                                 <th
                                     scope="row"
-                                    class="w-40 sm:w-56 bg-slate-50 px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                                    class="w-40 bg-slate-50 px-4 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase sm:w-56 dark:bg-slate-800 dark:text-slate-400"
                                 >
-                                    Criada em
+                                    Created at
                                 </th>
-                                <td class="px-4 py-2 text-slate-900 dark:text-slate-50">
+                                <td
+                                    class="px-4 py-2 text-slate-900 dark:text-slate-50"
+                                >
                                     {{ formatDateTime(props.task.created_at) }}
                                 </td>
                             </tr>
@@ -195,11 +207,13 @@ const duration = computed(() => {
                             <tr>
                                 <th
                                     scope="row"
-                                    class="w-40 sm:w-56 bg-slate-50 px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                                    class="w-40 bg-slate-50 px-4 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase sm:w-56 dark:bg-slate-800 dark:text-slate-400"
                                 >
-                                    Atualizada em
+                                    update at
                                 </th>
-                                <td class="px-4 py-2 text-slate-900 dark:text-slate-50">
+                                <td
+                                    class="px-4 py-2 text-slate-900 dark:text-slate-50"
+                                >
                                     {{ formatDateTime(props.task.updated_at) }}
                                 </td>
                             </tr>
@@ -208,19 +222,25 @@ const duration = computed(() => {
                             <tr>
                                 <th
                                     scope="row"
-                                    class="w-40 sm:w-56 bg-slate-50 px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                                    class="w-40 bg-slate-50 px-4 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase sm:w-56 dark:bg-slate-800 dark:text-slate-400"
                                 >
-                                    Início
+                                    Start
                                 </th>
-                                <td class="px-4 py-2 text-slate-900 dark:text-slate-50">
+                                <td
+                                    class="px-4 py-2 text-slate-900 dark:text-slate-50"
+                                >
                                     <span v-if="props.task.started_at">
-                                        {{ formatDateTime(props.task.started_at) }}
+                                        {{
+                                            formatDateTime(
+                                                props.task.started_at,
+                                            )
+                                        }}
                                     </span>
                                     <span
                                         v-else
-                                        class="italic text-slate-400 dark:text-slate-500"
+                                        class="text-slate-400 italic dark:text-slate-500"
                                     >
-                                        Não iniciada
+                                        Not started
                                     </span>
                                 </td>
                             </tr>
@@ -229,19 +249,25 @@ const duration = computed(() => {
                             <tr>
                                 <th
                                     scope="row"
-                                    class="w-40 sm:w-56 bg-slate-50 px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                                    class="w-40 bg-slate-50 px-4 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase sm:w-56 dark:bg-slate-800 dark:text-slate-400"
                                 >
-                                    Conclusão
+                                    Conclued
                                 </th>
-                                <td class="px-4 py-2 text-slate-900 dark:text-slate-50">
+                                <td
+                                    class="px-4 py-2 text-slate-900 dark:text-slate-50"
+                                >
                                     <span v-if="props.task.finished_at">
-                                        {{ formatDateTime(props.task.finished_at) }}
+                                        {{
+                                            formatDateTime(
+                                                props.task.finished_at,
+                                            )
+                                        }}
                                     </span>
                                     <span
                                         v-else
-                                        class="italic text-slate-400 dark:text-slate-500"
+                                        class="text-slate-400 italic dark:text-slate-500"
                                     >
-                                        Não finalizada
+                                        Not finished
                                     </span>
                                 </td>
                             </tr>
@@ -250,17 +276,19 @@ const duration = computed(() => {
                             <tr>
                                 <th
                                     scope="row"
-                                    class="w-40 sm:w-56 bg-slate-50 px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                                    class="w-40 bg-slate-50 px-4 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase sm:w-56 dark:bg-slate-800 dark:text-slate-400"
                                 >
-                                    Duração
+                                    Duration
                                 </th>
-                                <td class="px-4 py-2 text-slate-900 dark:text-slate-50">
+                                <td
+                                    class="px-4 py-2 text-slate-900 dark:text-slate-50"
+                                >
                                     <span v-if="duration">
                                         {{ duration }}
                                     </span>
                                     <span
                                         v-else
-                                        class="italic text-slate-400 dark:text-slate-500"
+                                        class="text-slate-400 italic dark:text-slate-500"
                                     >
                                         —
                                     </span>

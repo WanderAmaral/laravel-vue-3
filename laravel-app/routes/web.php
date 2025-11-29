@@ -26,9 +26,10 @@ Route::group(['middleware' => 'auth', 'verified'], function () {
         Route::get('/', [TaskController::class, 'index'])
             ->name('tasks.index');
 
-        //Criar Tarefa
-        Route::get('/create', [TaskController::class, 'create'])
-            ->name('tasks.create');
+
+
+        Route::post('/', [TaskController::class, 'store'])
+            ->name('tasks.store');
 
         //Visualizar Tarefa
         Route::get('/{task}', [TaskController::class, 'show'])

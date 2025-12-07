@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import FlashMessage from '@/components/FlashMessage.vue';
 import Pagination from '@/components/Pagination.vue';
-import Button from '@/components/ui/button/Button.vue';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
+import TaskFormDialog from '@/components/TaskFormDialog.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import { CirclePlus } from 'lucide-vue-next';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { CirclePlus } from 'lucide-vue-next';
 
 export interface Vehicle {
     id: number;
@@ -41,8 +33,6 @@ const breadcrumbItems: BreadcrumbItem[] = [
     },
 ];
 
-const dialogOpen = ref(false);
-
 const now = new Date();
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -59,33 +49,22 @@ const formatDateTime = (d: Date) =>
     pad(d.getMinutes());
 
 const nextWeek = new Date(now);
-nextWeek.setDate(nextWeek.getDate() + 7); 
+nextWeek.setDate(nextWeek.getDate() + 7);
 
 const minDateTime = formatDateTime(now);
 const maxDateTime = formatDateTime(nextWeek);
 
-const form = useForm({
-    name: '',
-    started_at: minDateTime,
-    finished_at: '',
-});
+const dialogOpen = ref(false);
+const taskEdit = ref<Vehicle | null>(null);
 
-function openDialog() {
+function openCreate() {
+    taskEdit.value = null;
     dialogOpen.value = true;
 }
 
-function closeDialog() {
-    dialogOpen.value = false;
-    form.reset();
-    form.clearErrors();
-}
-
-function submit() {
-    form.post('/tasks', {
-        onSuccess: () => {
-            closeDialog();
-        },
-    });
+function openEdit(task: Vehicle) {
+    taskEdit.value = task;
+    dialogOpen.value = true;
 }
 </script>
 
@@ -109,126 +88,23 @@ function submit() {
                     class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
                 >
                     <!-- Botão + Dialog -->
-                    <Dialog v-model:open="dialogOpen">
-                        <Button
-                            type="button"
-                            class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none dark:focus-visible:ring-offset-slate-900"
-                            @click="openDialog"
-                        >
-                            <CirclePlus class="h-4 w-4" />
-                            <span>New Task</span>
-                        </Button>
-
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>New Task</DialogTitle>
-                                <DialogDescription>
-                                    Preencha os campos abaixo para cadastrar uma
-                                    nova tarefa.
-                                </DialogDescription>
-                            </DialogHeader>
-
-                            <form
-                                class="mt-4 space-y-4"
-                                @submit.prevent="submit"
-                            >
-                                <!-- Nome -->
-                                <div>
-                                    <label
-                                        for="task-name"
-                                        class="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200"
-                                    >
-                                        Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        id="task-name"
-                                        v-model="form.name"
-                                        type="text"
-                                        class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-50"
-                                        required
-                                    />
-                                    <p
-                                        v-if="form.errors.name"
-                                        class="mt-1 text-xs text-red-500"
-                                    >
-                                        {{ form.errors.name }}
-                                    </p>
-                                </div>
-
-                                <!-- Datas -->
-                                <div class="grid gap-4 sm:grid-cols-2">
-                                    <div>
-                                        <label
-                                            for="task-started-at"
-                                            class="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200"
-                                        >
-                                            Start
-                                        </label>
-                                        <input
-                                            id="task-started-at"
-                                            type="datetime-local"
-                                            v-model="form.started_at"
-                                            :min="minDateTime"
-                                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-50"
-                                        />
-                                        <p
-                                            v-if="form.errors.started_at"
-                                            class="mt-1 text-xs text-red-500"
-                                        >
-                                            {{ form.errors.started_at }}
-                                        </p>
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            for="task-finished-at"
-                                            class="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200"
-                                        >
-                                            End
-                                        </label>
-                                        <input
-                                            id="task-finished-at"
-                                            v-model="form.finished_at"
-                                            :min="minDateTime"
-                                            :max="maxDateTime"
-                                            type="datetime-local"
-                                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-50"
-                                        />
-                                        <p
-                                            v-if="form.errors.finished_at"
-                                            class="mt-1 text-xs text-red-500"
-                                        >
-                                            {{ form.errors.finished_at }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <DialogFooter
-                                    class="mt-4 flex items-center justify-end gap-3"
-                                >
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        class="border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-800"
-                                        @click="closeDialog"
-                                    >
-                                        Cancelar
-                                    </Button>
-
-                                    <Button
-                                        type="submit"
-                                        class="bg-emerald-600 text-white hover:bg-emerald-700"
-                                        :disabled="form.processing"
-                                    >
-                                        <span v-if="form.processing"
-                                            >Salvando...</span
-                                        >
-                                        <span v-else>Salvar task</span>
-                                    </Button>
-                                </DialogFooter>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
+                    <Button
+                        class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none dark:focus-visible:ring-offset-slate-900"
+                        @click="openCreate"
+                    >
+                        <CirclePlus class="h-4 w-4" />
+                        New Task
+                    </Button>
+                    <TaskFormDialog
+                        :open="dialogOpen"
+                        :task="taskEdit"
+                        :url="taskEdit ? `/tasks/${taskEdit.id}` : '/tasks'"
+                        :method="taskEdit ? 'put' : 'post'"
+                        :min-date-time="minDateTime"
+                        :max-date-time="maxDateTime"
+                        @close="dialogOpen = false"
+                        @success="dialogOpen = false"
+                    />
                 </div>
             </div>
 
@@ -329,12 +205,13 @@ function submit() {
                                         >
                                             Show
                                         </Link>
-                                        <Link
-                                            :href="`/tasks/${task.id}/edit`"
-                                            class="inline-flex items-center rounded-md bg-amber-500/90 px-3 py-1.5 text-xs font-medium text-white hover:bg-amber-600"
+                                        <Button
+                                            class="inline-flex items-center rounded-md bg-amber-500/90 px-3 py-1.5 text-xs font-medium text-white hover:bg-amber-600 cursor-pointer"
+                                            @click="openEdit(task)"
                                         >
                                             Edit
-                                        </Link>
+                                        </Button>
+
                                         <DeleteButton
                                             :url="`/tasks/${task.id}`"
                                             title="Do you really want to delete this task?"

@@ -14,6 +14,7 @@ class Task extends Model
         'name',
         'started_at',
         'finished_at',
+        'user_id',
     ];
 
     protected $casts = ['started_at' => 'datetime', 'finished_at' => 'datetime'];

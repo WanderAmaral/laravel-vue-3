@@ -26,8 +26,6 @@ Route::group(['middleware' => 'auth', 'verified'], function () {
         Route::get('/', [TaskController::class, 'index'])
             ->name('tasks.index');
 
-
-
         Route::post('/', [TaskController::class, 'store'])
             ->name('tasks.store');
 
